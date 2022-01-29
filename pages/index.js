@@ -1,6 +1,8 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 
 const HomePage = () => {
+  const [feedbackItems, setFeedbackState] = useState([]);
+
   const emailInputRef = useRef();
   const feedbackInputRef = useRef();
 
@@ -29,6 +31,16 @@ const HomePage = () => {
       .then((data) => console.log("THIS IS IN INDEX: ", data));
   };
 
+  const loadFeedbackHandler = () => {
+    fetch("/api/feedback")
+      .then((response) => response.json())
+      .then((data) => {
+        setFeedbackState(data.feedback);
+      });
+  };
+
+  // console.log(feedbackItems.map((item) => item.text));
+
   return (
     <>
       <h1>The Home Page</h1>
@@ -45,6 +57,13 @@ const HomePage = () => {
           <button>Send Feedback</button>
         </div>
       </form>
+      <hr />
+      <button onClick={loadFeedbackHandler}>get feeedback</button>
+      <ul>
+        {feedbackItems.map((item) => (
+          <li key={item.id}>{item.text}</li>
+        ))}
+      </ul>
     </>
   );
 };
