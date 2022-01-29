@@ -9,6 +9,24 @@ const HomePage = () => {
 
     const enteredEmail = emailInputRef.current.value;
     const enteredFeedback = feedbackInputRef.current.value;
+
+    const reqBody = { email: enteredEmail, text: enteredFeedback };
+
+    fetch("/api/feedback", {
+      // will be _sending_ data to server
+      method: "POST",
+
+      // JSON.stringify to convert javascript object into json
+      body: JSON.stringify(reqBody),
+
+      //  to inform the backend that we are sending json data (required for nextjs api route)
+      headers: {
+        // content type wrapped in quotes since im using special character '-'
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => console.log("THIS IS IN INDEX: ", data));
   };
 
   return (
